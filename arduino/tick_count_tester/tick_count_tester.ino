@@ -2,6 +2,7 @@
 //include ros libs
 #include <ros.h>
 #include <std_msgs/Int16.h>
+#include <std_srvs/Empty.h>
 
 ros::NodeHandle nh;
  
@@ -22,7 +23,7 @@ const int encoder_maximum = 32767;
 const int interval = 100;
 long previousMillis = 0;
 long currentMillis = 0;
- 
+
 //========== ROS publishers =====================
 std_msgs::Int16 right_wheel_ticks;
 ros::Publisher rightpub("right_ticks", &right_wheel_ticks);
@@ -30,7 +31,16 @@ ros::Publisher rightpub("right_ticks", &right_wheel_ticks);
 
 std_msgs::Int16 left_wheel_ticks;
 ros::Publisher leftpub("left_ticks", &left_wheel_ticks);
+//========== ROS Service ========================
+bool setNearMax(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  left_wheel_ticks.data = 32760;
+  right_wheel_ticks.data = 32760;
+  return true;
+}
 
+ros::ServiceServer<std_srvs::Empty::Request, std_srvs::Empty::Response> set_near_max_service("set_to_near_max", &setNearMax);
+//===============================================
 
 // Increment the number of ticks
 void right_wheel_tick() 
@@ -82,6 +92,8 @@ void setup()
   nh.initNode();
   nh.advertise(rightpub);
   nh.advertise(leftpub);
+
+  nh.advertiseService(set_near_max_service);
 }
  
 void loop() 
@@ -99,5 +111,3 @@ void loop()
     nh.spinOnce();
   }
 }
-
-
