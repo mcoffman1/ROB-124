@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- Start rosserial connection to Arduino -->
+  <include file="$(find beginner_tutorials)/launch/rosserial.launch" />
+
+  <!-- Start the RViz click to 2D goal node -->
+  <node pkg="localization_data_pub" type="rviz_click_to_2d" name="rviz_click_to_2d" output="screen" />
+
+  <!-- Start the odometry publisher -->
+  <node pkg="localization_data_pub" type="ekf_odom_pub" name="ekf_odom_pub" output="screen" />
+
+  <!-- Start RViz (optional with config file) -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find localization_data_pub)/rviz/test_view.rviz" output="screen" required="true"/>
+</launch>
