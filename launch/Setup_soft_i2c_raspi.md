@@ -4,6 +4,7 @@ Software I2C lets you emulate I2C using **any two GPIO pins** via the `i2c-gpio`
 
 - The hardware I2C bus is already in use.
 - You need more than one I2C bus.
+- The hardware I2C doesn't allow clock stretching
 
 ---
 
@@ -27,7 +28,7 @@ Edit the boot configuration file:
 ```bash
 sudo nano /boot/firmware/config.txt
 ```
-    or
+or:
 ```bash
 sudo gedit /boot/firmware/config.txt
 ```
@@ -46,15 +47,17 @@ dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24
 - `Enter` → Confirm  
 - `Ctrl + X` → Exit the editor
 
----
-
 if you use gedit you can just click save
+
+---
 
 ### 🔁 Reboot the Pi
 
 ```bash
 sudo reboot
 ```
+
+---
 
 ### 3. Install I2C Tools
 
@@ -64,6 +67,8 @@ Install `i2c-tools` if it's not already installed:
 sudo apt update
 sudo apt install -y i2c-tools
 ```
+
+---
 
 ### 4. Verify the New I2C Bus
 
@@ -80,6 +85,8 @@ Scan the software I2C bus to detect connected devices
 ```bash
 sudo i2cdetect -r -y 3
 ```
+
+---
 
 ### Notes
 - You can create multiple software I2C buses by adding more dtoverlay lines with unique bus numbers and GPIO pins.
